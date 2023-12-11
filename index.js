@@ -24,7 +24,7 @@ app.post("/saveData", (req, res) => {
         if (err) {
             res.status(500).send("Error saving data to file");
         } else {
-            res.redirect("/");
+            res.send('<script>alert("Data berhasil tersimpan!"); window.location="/";</script>');
         }
     });
 });
@@ -37,7 +37,7 @@ app.post("/deleteData", (req, res) => {
         if (err) {
             res.status(500).send("Error saving data to file");
         } else {
-            res.redirect("/");
+            res.send('<script>alert("Data berhasil direset ulang!"); window.location="/";</script>');
         }
     });
 });
