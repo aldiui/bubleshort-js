@@ -22,9 +22,9 @@ app.post("/saveData", (req, res) => {
 
     fs.writeFile("public/data.txt", dataToSave, (err) => {
         if (err) {
-            res.status(500).send("Error saving data to file");
+            res.status(500).json({ success: false, message: "Error saving data to file" });
         } else {
-            res.send('<script>alert("Data berhasil tersimpan!"); window.location="/";</script>');
+            res.status(200).json({ success: true, message: "Data berhasil tersimpan!", data: dataToSave });
         }
     });
 });
@@ -35,9 +35,9 @@ app.post("/deleteData", (req, res) => {
 
     fs.writeFile("public/data.txt", dataToSave, (err) => {
         if (err) {
-            res.status(500).send("Error saving data to file");
+            res.status(500).json({ success: false, message: "Error saving data to file" });
         } else {
-            res.send('<script>alert("Data berhasil direset ulang!"); window.location="/";</script>');
+            res.status(200).json({ success: true, message: "Data berhasil direset ulang!", data: dataToSave });
         }
     });
 });

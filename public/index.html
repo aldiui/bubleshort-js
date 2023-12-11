@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="id">
 
 <head>
     <meta charset="utf-8" />
@@ -20,13 +20,11 @@
                     <div class="card-body">
                         <div class="list-group">
                             <button type="button" class="list-group-item list-group-item-action"
-                                onclick="addBubbleShort()">Input Angka</button>
+                                onclick="addBubbleShort()">Masukkan Angka</button>
                             <a type="button" class="list-group-item list-group-item-action" href="data.txt">Tampilkan
                                 Hasil Pengurutan</a></li>
-                            <form action="/deleteData" method="post">
-                                <input type="hidden" name="deleteData" value="-">
-                                <button type="submit" class="list-group-item list-group-item-action">Selesai</button></li>
-                            </form>
+                            <button type="button" class="list-group-item list-group-item-action"
+                                onclick="confirmDelete()">Selesai</button>
                         </div>
                     </div>
                 </div>
@@ -37,18 +35,18 @@
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h1 class="modal-title fs-5" id="exampleModalLabel">Input Angka</h1>
+                    <h1 class="modal-title fs-5" id="exampleModalLabel">Masukkan Angka</h1>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
                     <div class="form-group mb-3">
                         <label for="totalData" class="form-label">Masukkan jumlah angka yang akan diinput</label>
                         <div class="input-group">
-                            <input type="number" class="form-control" id="totalData">
+                            <input type="number" class="form-control" id="totalData" required>
                             <button class="btn btn-success" onclick="addInput()">+</button>
                         </div>
                     </div>
-                    <form id="formInput" action="/saveData" method="POST">
+                    <form id="formInput">
                     </form>
                 </div>
                 <div class="modal-footer">
@@ -64,6 +62,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"
         integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g=="
         crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
     <script>
         function addBubbleShort() {
             $('#inputAngka').modal('show');
@@ -75,14 +74,73 @@
             var totalData = $('#totalData').val();
             for (var index = 0; index < totalData; index++) {
                 $('#formInput').append(`<div class="form-group mb-3">
-                <label for="inputAngka" class="form-label">Input Angka ${index + 1}</label>
-                    <input type="number" class="form-control" id="inputAngka" name="inputAngka[]">
+                <label for="inputAngka" class="form-label">Masukkan Angka ${index + 1}</label>
+                    <input type="number" class="form-control" id="inputAngka" name="inputAngka[]" required>
                 </div>`);
             }
         }
 
         function saveBubbleShort() {
-            $('#formInput').submit();
+            var formData = $('#formInput').serialize();
+
+            $.ajax({
+                type: 'POST',
+                url: '/saveData',
+                data: formData,
+                success: function (response) {
+                    console.log(response);
+                    $('#inputAngka').modal('hide');
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Berhasil!',
+                        text: 'Data berhasil tersimpan! -- Nilai tugas : ' + response.data,
+                    });
+                },
+                error: function (error) {
+                    console.error(error);
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error!',
+                        text: 'Terjadi kesalahan saat menyimpan data.',
+                    });
+                }
+            });
+        }
+
+        function confirmDelete() {
+            Swal.fire({
+                title: 'Apakah Anda yakin?',
+                text: 'Ini akan mereset data!',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#3085d6',
+                confirmButtonText: 'Ya, selesai!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.ajax({
+                        type: 'POST',
+                        url: '/deleteData',
+                        data: { deleteData: '-' },
+                        success: function (response) {
+                            console.log(response);
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Berhasil!',
+                                text: 'Data berhasil direset ulang! -- Nilai tugas : ' + response.data,
+                            });
+                        },
+                        error: function (error) {
+                            console.error(error);
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Error!',
+                                text: 'Terjadi kesalahan saat mereset data.',
+                            });
+                        }
+                    });
+                }
+            });
         }
     </script>
 </body>
