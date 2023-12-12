@@ -71,6 +71,7 @@
         }
 
         function addInput() {
+            $('#formInput').empty();
             var totalData = $('#totalData').val();
             for (var index = 0; index < totalData; index++) {
                 $('#formInput').append(`<div class="form-group mb-3">
@@ -81,6 +82,26 @@
         }
 
         function saveBubbleShort() {
+            function validateForm() {
+                var isValid = true;
+                $('#formInput input').each(function () {
+                    if ($(this).val() === '') {
+                        isValid = false;
+                        return false;
+                    }
+                });
+                return isValid;
+            }
+
+            if (!validateForm()) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error!',
+                    text: 'Harap isi semua kolom sebelum menyimpan data.',
+                });
+                return;
+            }
+
             var formData = $('#formInput').serialize();
 
             $.ajax({
@@ -106,6 +127,7 @@
                 }
             });
         }
+
 
         function confirmDelete() {
             Swal.fire({
