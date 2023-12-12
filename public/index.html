@@ -73,9 +73,13 @@
         function addInput() {
             $('#formInput').empty();
             var totalData = $('#totalData').val();
+            $('#formInput').append(`<div>
+            <div class="mb-3">
+                Input Angka Secara Acak
+            </div>`);
             for (var index = 0; index < totalData; index++) {
                 $('#formInput').append(`<div class="form-group mb-3">
-                <label for="inputAngka" class="form-label">Masukkan Angka ${index + 1}</label>
+                <label for="inputAngka" class="form-label">Angka ${index + 1}</label>
                     <input type="number" class="form-control" id="inputAngka" name="inputAngka[]" required>
                 </div>`);
             }
