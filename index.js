@@ -16,7 +16,7 @@ app.get("/", (req, res) => {
 
 app.post("/saveData", (req, res) => {
     const inputAngka = req.body.inputAngka;
-    const bubbleShort = inputAngka.sort((a, b) => a - b);
+    const bubbleShort = inputAngka.map(Number).sort((a, b) => a - b);
 
     const dataToSave = `Nilai tugas : ${bubbleShort.join(", ")}`;
 
