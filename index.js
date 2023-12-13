@@ -1,4 +1,5 @@
 // Menggunakan framework backend javascript express
+/** @type {*} */
 const express = require("express");
 // Memparsing data dengan library body parser
 const bodyParser = require("body-parser");
@@ -23,6 +24,12 @@ app.get("/", (req, res) => {
 });
 
 // Routing untuk menyimpan data
+/**
+ * Handles a POST request to save data.
+ * @param {Object} req - The request object.
+ * @param {Object} res - The response object.
+ * @returns None
+ */
 app.post("/saveData", (req, res) => {
     // Menangkap data yang diinputkan
     const inputAngka = req.body.inputAngka;
